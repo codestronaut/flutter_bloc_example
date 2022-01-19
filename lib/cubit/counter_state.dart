@@ -1,4 +1,4 @@
-part of 'counter_bloc.dart';
+part of 'counter_cubit.dart';
 
 // ignore: must_be_immutable
 class CounterState extends Equatable {

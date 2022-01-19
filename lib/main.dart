@@ -1,4 +1,4 @@
-import 'package:bloc_state_management_example/bloc/counter_bloc.dart';
+import 'package:bloc_state_management_example/cubit/counter_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider<CounterBloc>(
-        create: (_) => CounterBloc(),
+      home: BlocProvider<CounterCubit>(
+        create: (_) => CounterCubit(),
         child: const MyHomePage(),
       ),
     );
@@ -38,23 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Counter App'),
       ),
-      // body: StreamBuilder(
-      //   stream: counterBloc.counterStream,
-      //   builder: (context, snapshot) {
-      //     return Center(
-      //       child: Column(
-      //         children: [
-      //           const Text('You have pushed the button this many times:'),
-      //           Text(
-      //             '${snapshot.data}',
-      //             style: Theme.of(context).textTheme.headline4,
-      //           ),
-      //         ],
-      //       ),
-      //     );
-      //   },
-      // ),
-      body: BlocBuilder<CounterBloc, CounterState>(builder: (context, state) {
+      body: BlocBuilder<CounterCubit, CounterState>(builder: (context, state) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           FloatingActionButton(
             onPressed: () {
-              context.read<CounterBloc>().add(Decrement());
+              context.read<CounterCubit>().decrement();
             },
             tooltip: 'Decrement',
             child: const Icon(Icons.remove),
@@ -81,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const SizedBox(width: 8.0),
           FloatingActionButton(
             onPressed: () {
-              context.read<CounterBloc>().add(Increment());
+              context.read<CounterCubit>().increment();
             },
             tooltip: 'Increment',
             child: const Icon(Icons.add),
