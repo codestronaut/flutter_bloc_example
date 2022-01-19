@@ -1,5 +1,6 @@
 import 'package:bloc_state_management_example/bloc/counter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: BlocProvider<CounterBloc>(
+        create: (_) => CounterBloc(),
+        child: const MyHomePage(),
+      ),
     );
   }
 }
@@ -28,41 +32,48 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final counterBloc = CounterBloc();
-
-  @override
-  void dispose() {
-    counterBloc.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Counter App'),
       ),
-      body: StreamBuilder(
-        stream: counterBloc.counterStream,
-        builder: (context, snapshot) {
-          return Center(
-            child: Column(
-              children: [
-                const Text('You have pushed the button this many times:'),
-                Text(
-                  '${snapshot.data}',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+      // body: StreamBuilder(
+      //   stream: counterBloc.counterStream,
+      //   builder: (context, snapshot) {
+      //     return Center(
+      //       child: Column(
+      //         children: [
+      //           const Text('You have pushed the button this many times:'),
+      //           Text(
+      //             '${snapshot.data}',
+      //             style: Theme.of(context).textTheme.headline4,
+      //           ),
+      //         ],
+      //       ),
+      //     );
+      //   },
+      // ),
+      body: BlocBuilder<CounterBloc, CounterState>(builder: (context, state) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('You have pushed the button this many times:'),
+              Text(
+                '${state.value}',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ],
+          ),
+        );
+      }),
       floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
             onPressed: () {
-              counterBloc.eventSink.add(CounterEvent.decrement);
+              context.read<CounterBloc>().add(Decrement());
             },
             tooltip: 'Decrement',
             child: const Icon(Icons.remove),
@@ -70,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
           const SizedBox(width: 8.0),
           FloatingActionButton(
             onPressed: () {
-              counterBloc.eventSink.add(CounterEvent.increment);
+              context.read<CounterBloc>().add(Increment());
             },
             tooltip: 'Increment',
             child: const Icon(Icons.add),
