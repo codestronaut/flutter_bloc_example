@@ -38,22 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Counter App'),
       ),
-      // body: StreamBuilder(
-      //   stream: counterBloc.counterStream,
-      //   builder: (context, snapshot) {
-      //     return Center(
-      //       child: Column(
-      //         children: [
-      //           const Text('You have pushed the button this many times:'),
-      //           Text(
-      //             '${snapshot.data}',
-      //             style: Theme.of(context).textTheme.headline4,
-      //           ),
-      //         ],
-      //       ),
-      //     );
-      //   },
-      // ),
       body: BlocBuilder<CounterBloc, CounterState>(builder: (context, state) {
         return Center(
           child: Column(
